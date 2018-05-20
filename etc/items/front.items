@@ -1,0 +1,1 @@
+Switch light_front_auto "Front Light Auto" { channel="mihome:ctrl_ln2:158d0002117f98:ch1", expire="90s,command=OFF" }

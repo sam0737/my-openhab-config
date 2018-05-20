@@ -1,0 +1,183 @@
+rule "Toilet Light on manually"
+when
+    Item light_toilet changed to ON
+then
+    if (light_toilet_trigger_by.state == NULL) { light_toilet_trigger_by.postUpdate("MANUAL") }
+end
+
+rule "Toilet Light off"
+when
+    Item light_toilet changed to OFF
+then
+    light_toilet_trigger_by.postUpdate(NULL)
+end
+
+rule "Toilet Fan on manually"
+when
+    Item sw_toilet_fan changed to ON
+then
+    if (sw_toilet_fan_trigger_by.state == NULL) { sw_toilet_fan_trigger_by.postUpdate("MANUAL") }
+end
+
+rule "Toilet Fan off"
+when
+    Item sw_toilet_fan changed to OFF
+then
+    sw_toilet_fan_trigger_by.postUpdate(NULL)
+end
+
+rule "Toilet Warmer on manually"
+when
+    Item sw_toilet_warmer changed to ON
+then
+    if (sw_toilet_warmer_trigger_by.state == NULL) { sw_toilet_warmer_trigger_by.postUpdate("MANUAL") }
+end
+
+rule "Toilet Warmer off"
+when
+    Item sw_toilet_warmer changed to OFF
+then
+    sw_toilet_warmer_trigger_by.postUpdate(NULL)
+end
+
+rule "Toilet Heater on manually"
+when
+    Item sw_toilet_heater changed to ON
+then
+    if (sw_toilet_heater_trigger_by.state == NULL) { sw_toilet_heater_trigger_by.postUpdate("MANUAL") }
+end
+
+rule "Toilet Heater off"
+when
+    Item sw_toilet_heater changed to OFF
+then
+    sw_toilet_heater_trigger_by.postUpdate(NULL)
+end
+
+rule "Toilet Auto 1"
+when
+    Item motion_toilet changed to ON or
+    Item motion_shower changed to ON
+then
+    if (sw_disable_automation.state == ON) return;
+    light_toilet_countdown.postUpdate(OFF)
+    if (light_toilet_trigger_by.state != "MANUAL") {
+        light_toilet_trigger_by.postUpdate("AUTO") 
+        light_toilet.sendCommand(ON)
+    }
+    sw_toilet_fan_countdown.postUpdate(OFF)
+    sw_toilet_fan_on_countdown.postUpdate(OFF)
+    if (sw_toilet_fan_trigger_by.state != "MANUAL") {
+        sw_toilet_fan_trigger_by.postUpdate("AUTO")
+        sw_toilet_fan_on_countdown.sendCommand(ON)
+    }
+    sw_toilet_warmer_countdown.postUpdate(OFF)
+    sw_toilet_warmer_trigger_by.postUpdate("OCCUPIED")
+end
+
+rule "Toilet Auto 2"
+when
+    Item motion_shower changed to ON
+then
+    if (sw_disable_automation.state == ON) return;
+    sw_toilet_heater_countdown.postUpdate(OFF)
+    sw_toilet_heater_trigger_by.postUpdate("OCCUPIED")
+    sw_toilet_heater.sendCommand(ON)
+end
+
+rule "Toilet Auto Off"
+when
+    Item motion_toilet changed to OFF or
+    Item motion_shower changed to OFF
+then
+    if (sw_disable_automation.state == ON) return;
+    if (motion_toilet.state == ON) return;
+    if (motion_shower.state == ON) return;
+
+    if (light_toilet_trigger_by.state == "AUTO") {
+        light_toilet_countdown.postUpdate(OFF)
+        light_toilet_countdown.sendCommand(ON)
+    }
+    if (sw_toilet_fan_trigger_by.state == "AUTO") {
+        sw_toilet_fan_on_countdown.postUpdate(OFF)
+        sw_toilet_fan_countdown.postUpdate(OFF)
+        sw_toilet_fan_countdown.sendCommand(ON)
+    }
+    if (sw_toilet_warmer_trigger_by.state == "OCCUPIED") {
+        sw_toilet_warmer_countdown.postUpdate(OFF)
+        sw_toilet_warmer_countdown.sendCommand(ON)
+    }
+    if (sw_toilet_heater_trigger_by.state == "OCCUPIED") {
+        sw_toilet_heater_countdown.postUpdate(OFF)
+        sw_toilet_heater_countdown.sendCommand(ON)
+    }
+end
+
+rule "Toilet Light Auto Off"
+when
+    Item light_toilet_countdown received command OFF
+then
+    if (sw_disable_automation.state == ON) return;
+    if (light_toilet_trigger_by.state == "AUTO") {
+    	light_toilet.sendCommand(OFF)
+   	light_toilet_trigger_by.postUpdate(NULL)
+    }
+end
+
+rule "Toilet Fan Auto On"
+when
+    Item sw_toilet_fan_on_countdown received command OFF
+then
+    if (sw_disable_automation.state == ON) return;
+    sw_toilet_fan_countdown.postUpdate(OFF)
+    if (sw_toilet_fan_trigger_by.state == "AUTO") {
+    	sw_toilet_fan.sendCommand(ON)
+        sw_toilet_fan_countdown.sendCommand(ON)
+    }
+end
+
+rule "Toilet Fan Auto Off"
+when
+    Item sw_toilet_fan_countdown received command OFF
+then
+    if (sw_disable_automation.state == ON) return;
+    if (sw_toilet_fan_trigger_by.state == "AUTO") {
+    	sw_toilet_fan.sendCommand(OFF)
+    	sw_toilet_fan_trigger_by.postUpdate(NULL)
+    }
+end
+
+rule "Toilet Warmer Auto Off"
+when
+    Item sw_toilet_warmer_countdown received command OFF
+then
+    if (sw_disable_automation.state == ON) return;
+    if (sw_toilet_warmer_trigger_by.state == "OCCUPIED") {
+	sw_toilet_warmer_trigger_by.postUpdate(NULL)
+    	sw_toilet_warmer.sendCommand(OFF)
+    	sw_toilet_warmer_trigger_by.postUpdate(NULL)
+    }
+end
+
+rule "Toilet Heater Auto Off"
+when
+    Item sw_toilet_heater_countdown received command OFF
+then
+    if (sw_disable_automation.state == ON) return;
+    if (sw_toilet_heater_trigger_by.state == "OCCUPIED") {
+        sw_toilet_heater_trigger_by.postUpdate(NULL)
+    	sw_toilet_heater.sendCommand(OFF)
+    	sw_toilet_heater_trigger_by.postUpdate(NULL)
+    }
+end
+
+rule "Remote Toilet Warmer"
+when
+    Channel "mihome:86sw1:158d00021134b8:ch1" triggered SHORT_PRESSED
+then
+    if (sw_toilet_warmer.state == ON) {
+        sw_toilet_warmer.sendCommand(OFF)
+    } else {
+        sw_toilet_warmer.sendCommand(ON)
+    }
+end

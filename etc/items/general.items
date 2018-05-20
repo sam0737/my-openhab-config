@@ -1,0 +1,5 @@
+DateTime sunrise_time "Sunrise [%1$tH:%1$tM]" { channel="astro:sun:home:rise#start" }
+DateTime sunset_time "Sunset [%1$tH:%1$tM]" { channel="astro:sun:home:set#start" }
+
+Switch v_sunup "Sun is up"
+Switch v_away "Away Home"

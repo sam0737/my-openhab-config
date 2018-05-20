@@ -1,0 +1,6 @@
+Strategies {
+    default = everyChange
+}
+Items {
+    v_sunup, v_away : strategy = everyChange, restoreOnStartup
+}

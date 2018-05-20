@@ -1,0 +1,13 @@
+rule "Away On"
+when
+    Item v_away changed to ON
+then
+    logInfo("away", "ON")
+end
+
+rule "Away Off"
+when
+    Item v_away changed to OFF
+then
+    logInfo("away", "OFF")
+end

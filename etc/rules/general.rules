@@ -1,0 +1,14 @@
+rule "Sunrise"
+when
+    Channel 'astro:sun:home:rise#event' triggered START 
+then
+    v_sunup.sendCommand(ON)
+end
+
+rule "Sunrise"
+when
+    Channel 'astro:sun:home:set#event' triggered START 
+then
+    v_sunup.sendCommand(OFF)
+end
+

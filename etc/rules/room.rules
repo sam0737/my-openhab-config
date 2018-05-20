@@ -1,0 +1,60 @@
+rule "Front"
+when
+    Channel "mihome:86sw1:158d0002137e64:ch1" triggered SHORT_PRESSED
+then
+    m_all_off.sendCommand(ON)
+end
+
+rule "Master Left"
+when
+    Channel "mihome:86sw2:158d0001e07016:ch1" triggered SHORT_PRESSED
+then
+    if (g_master.state == ON) {
+        g_master.sendCommand(OFF)
+    } else {
+        g_master.sendCommand(ON)
+    }
+end
+
+rule "Master Right"
+when
+    Channel "mihome:86sw2:158d0001e07016:ch2" triggered SHORT_PRESSED
+then
+    m_public_off.sendCommand(ON)
+end
+
+rule "Room 1 Left"
+when
+    Channel "mihome:86sw2:158d00016437ea:ch1" triggered SHORT_PRESSED
+then
+    if (g_room1.state == ON) {
+        g_room1.sendCommand(OFF)
+    } else {
+        g_room1.sendCommand(ON)
+    }
+end
+
+rule "Room 1 Right"
+when
+    Channel "mihome:86sw2:158d00016437ea:ch2" triggered SHORT_PRESSED
+then
+    m_public_off.sendCommand(ON)
+end
+
+rule "Room 2 Left"
+when
+    Channel "mihome:86sw2:158d0002150284:ch1" triggered SHORT_PRESSED
+then
+    if (g_room2.state == ON) {
+        g_room2.sendCommand(OFF)
+    } else {
+        g_room2.sendCommand(ON)
+    }
+end
+
+rule "Room 2 Right"
+when
+    Channel "mihome:86sw2:158d0002150284:ch2" triggered SHORT_PRESSED
+then
+    m_public_off.sendCommand(ON)
+end

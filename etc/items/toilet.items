@@ -1,0 +1,12 @@
+String light_toilet_trigger_by "Toilet Light Trigger By"
+Switch light_toilet_countdown "Toilet Light Countdown" { expire="3m,command=OFF" }
+String sw_toilet_fan_trigger_by "Toilet Fan Trigger By"
+Switch sw_toilet_fan_on_countdown "Toilet Fan On Countdown" { expire="3s,command=OFF" }
+Switch sw_toilet_fan_countdown "Toilet Fan Off Countdown" { expire="3m,command=OFF" }
+String sw_toilet_warmer_trigger_by "Toilet Warmer Trigger By"
+Switch sw_toilet_warmer_countdown "Toilet Warmer Countdown" { expire="30s,command=OFF" }
+String sw_toilet_heater_trigger_by "Toilet Heater Trigger By"
+Switch sw_toilet_heater_countdown "Toilet Heater Countdown" { expire="5m,command=OFF" }
+
+Number motion_timeout_toilet "Toilet Timeout" { channel="mihome:sensor_motion_aq2:158d0001e54561:motionOffTimer", expire="15s,command=15" }
+Number motion_timeout_shower "Shower Timeout" { channel="mihome:sensor_motion_aq2:158d000224f847:motionOffTimer", expire="15s,command=15" }

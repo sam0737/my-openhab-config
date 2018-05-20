@@ -1,0 +1,45 @@
+rule "All Off"
+when
+    Item m_all_off received command ON
+then
+    g_all.members.forEach[i|i.sendCommand(OFF)]
+    if (sw_toilet_fan_trigger_by.state != "AUTO") {
+    	sw_toilet_fan.sendCommand(OFF)
+    }
+    m_living_ac_off.sendCommand(ON)
+    m_living_tv_off.sendCommand(ON)
+    v_away.sendCommand(ON)
+end
+
+rule "Any Activity"
+when
+    Item g_activity changed to ON
+then
+    v_away.sendCommand(OFF)
+end
+
+rule "Public Off"
+when
+    Item m_public_off received command ON
+then
+    g_pub.members.forEach[i|i.sendCommand(OFF)]
+    if (sw_toilet_fan_trigger_by.state != "AUTO") {
+    	sw_toilet_fan.sendCommand(OFF)
+    }
+    m_living_ac_off.sendCommand(ON)
+    m_living_tv_off.sendCommand(ON)
+end
+
+rule "Living AC Off"
+when
+    Item m_living_ac_off received command ON
+then
+    executeCommandLine("/root/broadlink_cli --device @/root/living.dev --send @/root/living_ac_off.data")
+end
+
+rule "Living TV Off"
+when
+    Item m_living_tv_off received command ON
+then
+    executeCommandLine("/root/broadlink_cli --device @/root/living.dev --send @/root/living_tv_off.data")
+end

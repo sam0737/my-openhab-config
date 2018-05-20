@@ -1,0 +1,4 @@
+String light_corridor_trigger_by "Corridor Light Trigger By"
+Switch light_corridor_countdown "Corridor Light Countdown" { expire="30s,command=OFF" }
+Number motion_timeout_corridor "Corridor Timeout" { channel="mihome:sensor_motion_aq2:158d000224f8e1:motionOffTimer", expire="15s,command=15" }
+

@@ -1,0 +1,48 @@
+rule "Corridor Light on manually"
+when
+    Item light_corridor changed to ON
+then
+    if (light_corridor_trigger_by.state == NULL) { light_corridor_trigger_by.postUpdate("MANUAL") }
+end
+
+rule "Corridor Light off"
+when
+    Item light_corridor changed to OFF
+then
+    light_corridor_trigger_by.postUpdate(NULL)
+end
+
+rule "Corridor Auto"
+when
+    Item motion_corridor changed to ON
+then
+    if (sw_disable_automation.state == ON) return;
+    if (v_sunup.state == ON) return;
+    light_corridor_countdown.postUpdate(OFF)
+    if (light_corridor_trigger_by.state != "MANUAL") {
+        light_corridor_trigger_by.postUpdate("AUTO") 
+        light_corridor.sendCommand(ON)
+    }
+end
+
+rule "Corridor Auto Off"
+when
+    Item motion_corridor changed to OFF
+then
+    if (sw_disable_automation.state == ON) return;
+
+    if (light_corridor_trigger_by.state == "AUTO") {
+        light_corridor_countdown.postUpdate(OFF)
+        light_corridor_countdown.sendCommand(ON)
+    }
+end
+
+rule "Corridor Light Auto Off"
+when
+    Item light_corridor_countdown received command OFF
+then
+    if (sw_disable_automation.state == ON) return;
+    if (light_corridor_trigger_by.state == "AUTO") {
+    	light_corridor.sendCommand(OFF)
+    }
+end

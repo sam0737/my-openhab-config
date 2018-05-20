@@ -1,0 +1,4 @@
+Switch m_living_ac_off "Macro: Living AC Off" { expire="1s,command=OFF" }
+Switch m_living_tv_off "Macro: Living TV Off" { expire="1s,command=OFF" }
+Switch m_all_off "Macro: All Off" { expire="1s,command=OFF" }
+Switch m_public_off "Macro: Public Off" { expire="1s,command=OFF" }
